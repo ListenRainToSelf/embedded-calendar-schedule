@@ -1,0 +1,526 @@
+/* ═══ 嵌入日历日程 Embedded Calendar Schedule ═══ */
+
+.ecs-calendar-block {
+	margin: 0.75em 0;
+	padding: 10px 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 10px;
+	background: var(--background-primary);
+	user-select: none;
+}
+
+/* ── 工具栏 ── */
+.ecs-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-bottom: 8px;
+	flex-wrap: wrap;
+}
+.ecs-nav {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+.ecs-month-title {
+	font-weight: 700;
+	font-size: 1.05em;
+	min-width: 84px;
+	text-align: center;
+}
+.ecs-icon-btn,
+.ecs-text-btn {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	color: var(--text-muted);
+	cursor: pointer;
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-size: 0.9em;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+.ecs-icon-btn:hover,
+.ecs-text-btn:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+.ecs-icon-btn svg {
+	width: 16px;
+	height: 16px;
+}
+.ecs-filter-chip {
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 999px;
+	padding: 2px 10px;
+}
+.ecs-add-btn {
+	color: var(--text-accent);
+	font-weight: 600;
+}
+.ecs-add-btn svg {
+	width: 14px;
+	height: 14px;
+}
+.ecs-toolbar-right {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* ── 星期表头 ── */
+.ecs-weekdays {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 2px;
+	margin-bottom: 2px;
+}
+.ecs-wk {
+	text-align: center;
+	font-size: 0.78em;
+	color: var(--text-muted);
+	padding: 2px 0;
+}
+.ecs-wk-end {
+	color: var(--color-red, #e05260);
+}
+
+/* ── 日期网格 ── */
+.ecs-grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 2px;
+}
+.ecs-cell {
+	min-height: 46px;
+	border-radius: 6px;
+	padding: 3px 4px 2px;
+	cursor: pointer;
+	border: 1px solid transparent;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	transition: background 0.1s ease;
+}
+.ecs-cell:hover {
+	background: var(--background-modifier-hover);
+}
+.ecs-cell.ecs-out {
+	opacity: 0.38;
+}
+.ecs-cell.ecs-weekend .ecs-daynum {
+	color: var(--color-red, #e05260);
+}
+.ecs-cell.ecs-selected {
+	border-color: var(--interactive-accent);
+	background: var(--background-modifier-active-hover);
+}
+.ecs-cell.ecs-today {
+	background: var(--background-secondary);
+}
+.ecs-cell.ecs-today .ecs-daynum {
+	color: var(--interactive-accent);
+	font-weight: 800;
+}
+.ecs-cell-head {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 2px;
+	line-height: 1.2;
+}
+.ecs-daynum {
+	font-size: 0.92em;
+	font-weight: 600;
+}
+.ecs-holiday-name {
+	font-size: 0.68em;
+	color: var(--color-red, #e05260);
+	font-weight: 700;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.ecs-lunar,
+.ecs-lunar-fest {
+	font-size: 0.68em;
+	color: var(--text-faint);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.ecs-lunar-fest {
+	color: var(--color-orange, #f5a623);
+	font-weight: 700;
+}
+.ecs-workday-badge {
+	font-size: 0.6em;
+	color: var(--color-orange, #f5a623);
+	border: 1px solid var(--color-orange, #f5a623);
+	border-radius: 3px;
+	padding: 0 2px;
+	margin-left: 2px;
+	line-height: 1.2;
+}
+.ecs-workday-cell .ecs-daynum {
+	color: var(--color-orange, #f5a623);
+}
+
+/* ── 事件圆点 ── */
+.ecs-dots {
+	display: flex;
+	align-items: center;
+	gap: 3px;
+	min-height: 8px;
+	margin-top: auto;
+}
+.ecs-dot {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	display: inline-block;
+	flex-shrink: 0;
+}
+.ecs-dot-done {
+	opacity: 0.4;
+}
+.ecs-dot-more {
+	font-size: 0.65em;
+	color: var(--text-faint);
+}
+
+/* ── 日程列表 ── */
+.ecs-list {
+	margin-top: 10px;
+	border-top: 1px solid var(--background-modifier-border);
+	padding-top: 8px;
+}
+.ecs-list-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 4px;
+}
+.ecs-list-title {
+	font-weight: 700;
+	font-size: 0.95em;
+}
+.ecs-day-group {
+	margin: 6px 0;
+}
+.ecs-day-label {
+	font-size: 0.78em;
+	color: var(--text-muted);
+	margin: 4px 0 2px 2px;
+}
+.ecs-empty {
+	color: var(--text-faint);
+	font-size: 0.85em;
+	padding: 8px 2px;
+}
+.ecs-item {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 3px 4px;
+	border-radius: 6px;
+	font-size: 0.88em;
+	line-height: 1.4;
+}
+.ecs-item:hover {
+	background: var(--background-modifier-hover);
+}
+.ecs-item-done .ecs-item-title {
+	text-decoration: line-through;
+	color: var(--text-faint);
+}
+.ecs-item-check {
+	color: var(--text-faint);
+	cursor: pointer;
+	display: inline-flex;
+	flex-shrink: 0;
+}
+.ecs-item-check:hover {
+	color: var(--text-accent);
+}
+.ecs-item-check svg {
+	width: 15px;
+	height: 15px;
+}
+.ecs-item-dot {
+	width: 8px;
+	height: 8px;
+	flex-shrink: 0;
+}
+.ecs-item-time {
+	color: var(--text-muted);
+	font-size: 0.85em;
+	font-variant-numeric: tabular-nums;
+	flex-shrink: 0;
+	min-width: 56px;
+}
+.ecs-item-title {
+	cursor: pointer;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.ecs-item-note {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	margin-left: auto;
+	color: var(--text-faint);
+	font-size: 0.85em;
+	cursor: pointer;
+	flex-shrink: 0;
+	max-width: 40%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.ecs-item-note:hover {
+	color: var(--text-accent);
+}
+.ecs-item-note svg {
+	width: 12px;
+	height: 12px;
+	flex-shrink: 0;
+}
+.ecs-item-actions {
+	display: inline-flex;
+	gap: 2px;
+	flex-shrink: 0;
+	opacity: 0;
+	transition: opacity 0.12s ease;
+}
+.ecs-item:hover .ecs-item-actions {
+	opacity: 1;
+}
+.ecs-item-btn {
+	color: var(--text-faint);
+	cursor: pointer;
+	display: inline-flex;
+	padding: 2px;
+	border-radius: 4px;
+}
+.ecs-item-btn:hover {
+	color: var(--text-normal);
+	background: var(--background-modifier-hover);
+}
+.ecs-item-btn svg {
+	width: 14px;
+	height: 14px;
+}
+.ecs-footer {
+	margin-top: 8px;
+	font-size: 0.72em;
+	color: var(--text-faint);
+	text-align: center;
+}
+
+/* ═══ 侧边栏日程面板 ═══ */
+.ecs-panel {
+	padding: 10px 12px;
+}
+.ecs-panel-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 10px;
+	flex-wrap: wrap;
+}
+.ecs-panel-title {
+	font-weight: 800;
+	font-size: 1.1em;
+	margin-right: auto;
+}
+.ecs-seg {
+	display: inline-flex;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	overflow: hidden;
+}
+.ecs-seg-btn {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	padding: 3px 10px;
+	font-size: 0.82em;
+	color: var(--text-muted);
+	cursor: pointer;
+}
+.ecs-seg-btn.is-active {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+.ecs-panel-add {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: transparent;
+	border: 1px solid var(--background-modifier-border);
+	box-shadow: none;
+	color: var(--text-accent);
+	cursor: pointer;
+	border-radius: 8px;
+	padding: 3px 10px;
+	font-size: 0.85em;
+}
+.ecs-panel-add svg {
+	width: 13px;
+	height: 13px;
+}
+.ecs-panel-empty {
+	margin-top: 40px;
+	text-align: center;
+	color: var(--text-muted);
+}
+.ecs-panel-empty-title {
+	font-size: 1.1em;
+	font-weight: 700;
+	margin-bottom: 6px;
+}
+.ecs-panel-empty-hint {
+	font-size: 0.85em;
+	color: var(--text-faint);
+	padding: 0 16px;
+}
+.ecs-panel-day {
+	font-size: 0.8em;
+	color: var(--text-muted);
+	margin: 10px 0 2px;
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 8px;
+}
+.ecs-panel-day-today {
+	color: var(--text-accent);
+	font-weight: 700;
+}
+.ecs-panel-past-hint {
+	font-size: 0.9em;
+	color: var(--text-faint);
+}
+.ecs-panel-row {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 4px;
+	border-radius: 8px;
+	font-size: 0.9em;
+}
+.ecs-panel-row:hover {
+	background: var(--background-modifier-hover);
+}
+.ecs-panel-row.ecs-row-past {
+	opacity: 0.65;
+}
+.ecs-panel-main {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+}
+.ecs-panel-line1 {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 8px;
+}
+.ecs-panel-title-text {
+	font-weight: 600;
+	cursor: pointer;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.ecs-panel-time {
+	color: var(--text-muted);
+	font-size: 0.85em;
+	font-variant-numeric: tabular-nums;
+	flex-shrink: 0;
+}
+.ecs-panel-line2 {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 0.8em;
+	color: var(--text-faint);
+	min-width: 0;
+}
+.ecs-panel-note {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	cursor: pointer;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.ecs-panel-note:hover {
+	color: var(--text-accent);
+}
+.ecs-panel-note svg {
+	width: 11px;
+	height: 11px;
+	flex-shrink: 0;
+}
+.ecs-panel-note-none {
+	cursor: default;
+}
+.ecs-panel-loc {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+/* ═══ 弹窗与设置 ═══ */
+.ecs-modal-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 16px;
+}
+.ecs-wide-input {
+	width: 100%;
+}
+.ecs-date-input,
+.ecs-time-input {
+	width: 130px;
+}
+.ecs-desc-area {
+	min-height: 60px;
+	width: 100%;
+	resize: vertical;
+}
+.ecs-setting-row .setting-item-info {
+	display: none;
+}
+.ecs-setting-row {
+	flex-wrap: wrap;
+}
+.ecs-json-area {
+	width: 100%;
+	font-family: var(--font-monospace);
+	font-size: 0.85em;
+	resize: vertical;
+}
+.ecs-confirm-message {
+	color: var(--text-muted);
+}
+.ecs-suggest-title {
+	font-weight: 600;
+}
+.ecs-suggest-path {
+	font-size: 0.8em;
+	color: var(--text-faint);
+}
+.ecs-statusbar {
+	cursor: pointer;
+}

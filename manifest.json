@@ -1,0 +1,10 @@
+{
+	"id": "embedded-calendar-schedule",
+	"name": "嵌入日历日程",
+	"version": "1.0.0",
+	"minAppVersion": "1.5.0",
+	"description": "在笔记中嵌入交互式日历：斜杠命令插入、右键添加日程、日历下方显示日程列表、节假日与农历标记，并与 TaskNotes 任务笔记联动（来源笔记 + 日程信息 + 时间）。",
+	"author": "ZCode",
+	"authorUrl": "",
+	"isDesktopOnly": false
+}
